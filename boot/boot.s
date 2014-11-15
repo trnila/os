@@ -21,7 +21,7 @@ loop:
 
 	jmp $
 
-%include "boot/printScreen.s"
+%include "boot/printString.s"
 %include "boot/printHex.s"
 %include "boot/diskLoad.s"
 
