@@ -1,50 +1,12 @@
-; set our start instruction address to allow relative addresses
-[org 0x7c00]
-
-loop:
-	mov bx, name
-	call printString
-
-	mov dx, 0x1fbf
-	call printHex
-
-	jmp $
-
-
-; prints string to screen
-; bx - string terminated with 0
-printString:
-	; Write Text in Teletype Mode
-	mov ah, 0x0e
-
-	printStringNext:
-	; mov data on address bx to al
-	mov al, [bx]
-
-	; check if got string terminator \0
-	cmp al, 0
-	je printStringEnd
-
-	; print it
-	int 0x10
-
-	; increment address of string
-	inc bx
-	jmp printStringNext
-
-	printStringEnd:
-	ret
-
-
 ; print hexa number to screen
 ; dx - number to print
 printHex:
 	; set counter to address of first bit
-	mov bx, hexOut + 5
+	mov bx, printHexMem + 5
 
 	printHexNext:
 	; check if we are at end
-	cmp bx, hexOut + 1
+	cmp bx, printHexMem + 1
 	jle printHexPrint
 
 	; create copy of number because we will destroy him
@@ -75,7 +37,7 @@ printHex:
 	jmp printHexNext
 
 	printHexPrint:
-	mov bx, hexOut
+	mov bx, printHexMem
 	call printString
 	ret
 
@@ -84,13 +46,4 @@ printHex:
 	jmp printHexCont
 
 	; string that we are writting to
-	hexOut: db '0x0000', 0
-
-name:
-	db "Hello world!", 0
-
-; fill the rest of sector with zeroes
-times 510-($-$$) db 0
-
-; place magic boot flag
-dw 0xaa55
+	printHexMem: db '0x0000', 0
