@@ -33,15 +33,3 @@ times 510-($-$$) db 0
 
 ; place magic boot flag
 dw 0xaa55
-
-; here are data in next 512b sector
-mov bx, loadingString
-call 0x0000:printString
-mov bx, loadingString
-call 0x0000:printString
-
-mov ah, 0x0e
-mov al, 'D'
-int 0x10
-
-jmp $
